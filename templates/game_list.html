@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block body_block %}
+    <h2>{{ title }}</h2>
+    {% if games %}
+        <table class="table table-hover table-striped">
+            <tr><th>Name</th><th>Location</th><th>Time</th><th>Players</th><th>Organiser</th></tr>
+            {% for game in games %}
+                <tr>
+                    <td><a href="/game/{{ game.id }}">{{ game.name }}</a></td>
+                    <td>{{ game.location.name }}</td>
+                    <td>{{ game.datetime }}</td>
+                    <td>{{ game.players.all|length }}/{{ game.max_players }}</td>
+                    <td>{{ game.organiser.first_name }} {{ game.organiser.last_name }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+
+    {% else %}
+        <h3>There are no games to show.</h3>
+    {% endif %}
+
+{% endblock %}

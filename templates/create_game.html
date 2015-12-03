@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+
+{% block body_block %}
+
+    {% if created %}
+        <h3>Game was successfully added.</h3>
+    {% else %}
+        <h3>Create new game</h3>
+        <form method="post" role="form">
+            {% for field in game_form.visible_fields %}
+                <div id="div_{{ field.html_name }}"
+                     class="form-group{% if field.errors %} has-error{% endif %}">
+                    {{ field.label_tag }}
+                    {{ field }}
+                    <div class="text-muted pull-right">
+                        <small>{{ field.help_text }}</small>
+                    </div>
+                    <div class="help-block">
+                        {{ field.errors }}
+                    </div>
+                </div>
+            {% endfor %}
+            {% for hidden in form.hidden_fields %}
+                {{ hidden }}
+            {% endfor %}
+            {% csrf_token %}
+            <div class="form-group">
+                <input type="submit" value="Submit" class="btn btn-primary" />
+            </div>
+        </form>
+    {% endif %}
+
+{% endblock %}

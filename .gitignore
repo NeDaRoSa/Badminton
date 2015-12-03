@@ -1,0 +1,17 @@
+__pycache__/
+*.py[cod]
+
+.idea*
+
+*.sqlite3
+
+# Django stuff:
+*.log
+*.pot
+
+MANIFEST
+*.egg-info
+
+
+*.png
+*.jpg

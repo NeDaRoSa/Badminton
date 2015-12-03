@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block body_block %}
+
+    {% if just_joined %}
+        <div class="alert alert-success"><b>Thank you.</b> The player list was updated.</div>
+        <hr/>
+    {% endif %}
+
+    <h3>{{ game.name }}</h3>
+    {% if is_past_game %}
+        <div class="alert alert-warning">This is an old game.</div>
+    {% else %}
+        {% if has_joined %}
+            <div class="alert alert-info">You have joined this game.</div>
+        {% elif empty_list %}
+            <div class="alert alert-success">Empty spaces are still available.</div>
+        {% else %}
+            <div class="alert alert-warning">This game is full.</div>
+        {% endif %}
+    {% endif %}
+    <hr/>
+
+    <p> <b>Club:</b> {{ game.location.name }}</p>
+    <p> <b>Address:</b> {{ game.location.address }}</p>
+    <p> <b>Time:</b> {{ game.datetime }}</p>
+    <p> <b>Length:</b> {{ game.duration }} hours</p>
+    <p> <b>Contact:</b> {{ game.organiser.first_name }} {{ game.organiser.last_name }}</p>
+
+    <hr/>
+    <h4> Additional Information </h4>
+    <p> {{ game.description }}</p>
+
+    <h4> Players ({{ game.players.all|length }}/{{ game.max_players }})</h4>
+    <ol>
+        {% for player in game.players.all %}
+            <li> {{ player.first_name }} {{ player.last_name }}</li>
+        {% endfor %}
+        {% for empty in empty_list %}
+            <li>Empty</li>
+        {% endfor %}
+
+    </ol>
+
+    {% if not is_past_game %}
+        {% if has_joined %}
+            <form action="/game/{{ game.id }}/" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="action_type" value="remove">
+                <input value="Leave" class="btn btn-danger" type="submit">
+            </form>
+        {% else %}
+            {% if empty_list %}
+                <form action="/game/{{ game.id }}/" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="action_type" value="add">
+                    <input value="Join" class="btn btn-primary" type="submit">
+                </form>
+            {% else %}
+                <div class="alert alert-danger">This game is full.</div>
+            {% endif %}
+        {% endif %}
+    {% endif %}
+
+{% endblock %}
