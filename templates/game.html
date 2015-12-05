@@ -116,26 +116,29 @@
             </p>
         </div>
 
-
-        {% if not is_past_game %}
-            {% if has_joined %}
-                <form action="/game/{{ game.id }}/" method="post">
-                    {% csrf_token %}
-                    <input type="hidden" name="action_type" value="remove">
-                    <input value="Leave" class="btn btn-danger" type="submit">
-                </form>
-            {% else %}
-                {% if empty_list %}
-                    <form action="/game/{{ game.id }}/" method="post">
-                        {% csrf_token %}
-                        <input type="hidden" name="action_type" value="add">
-                        <input value="Join" class="btn btn-primary" type="submit">
-                    </form>
-                {% else %}
-                    <div class="alert alert-danger">This game is full.</div>
+        <div class="row">
+            <p>
+                {% if not is_past_game %}
+                    {% if has_joined %}
+                        <form action="/game/{{ game.id }}/" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="action_type" value="remove">
+                            <input value="Leave" class="btn btn-danger" type="submit">
+                        </form>
+                    {% else %}
+                        {% if empty_list %}
+                            <form action="/game/{{ game.id }}/" method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="action_type" value="add">
+                                <input value="Join" class="btn btn-primary" type="submit">
+                            </form>
+                        {% else %}
+                            <div class="alert alert-danger">This game is full.</div>
+                        {% endif %}
+                    {% endif %}
                 {% endif %}
-            {% endif %}
-        {% endif %}
+            </p>
+        </div>
     </div>
 
 {% endblock %}
