@@ -23,6 +23,15 @@ class UserForm(UserCreationForm):
         fields = ('username', 'first_name', 'last_name', 'password1', 'password2')
 
 
+class UserUpdateForm(forms.ModelForm):
+    first_name = forms.CharField(max_length=30, widget=forms.TextInput(attrs={'class': 'form-control'}))
+    last_name = forms.CharField(max_length=30, widget=forms.TextInput(attrs={'class': 'form-control'}))
+
+    class Meta:
+        model = User
+        fields = ('first_name', 'last_name')
+
+
 class GameForm(forms.ModelForm):
 
     _datetime_options = {

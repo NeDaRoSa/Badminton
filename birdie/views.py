@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
-from birdie.forms import UserForm, GameForm, PasswordChangeForm
+from birdie.forms import UserForm, GameForm, PasswordChangeForm, UserUpdateForm
 from birdie.models import Game, Comment
 
 
@@ -17,7 +17,6 @@ def index(request):
 
 
 def user_login(request):
-
     if request.user.is_authenticated():
         return HttpResponseRedirect('/home/')
 
@@ -80,8 +79,25 @@ def register(request):
     else:
         user_form = UserForm()
 
-    return render(request, 'register.html',
+    return render(request, 'registration/register.html',
                   {'user_form': user_form, 'registered': registered, 'passphrase_error': passphrase_error})
+
+
+@login_required()
+def edit_profile(request):
+    updated = False
+
+    if request.method == 'POST':
+        user_form = UserUpdateForm(data=request.POST, instance=request.user)
+        if user_form.is_valid():
+            user_form.save()
+            updated = True
+        else:
+            print(user_form.errors)
+    else:
+        user_form = UserUpdateForm(instance=request.user)
+
+    return render(request, 'registration/edit_profile.html', {'user_form': user_form, 'updated': updated})
 
 
 @login_required()
@@ -153,7 +169,8 @@ def game(request, game_id):
             my_game.players.remove(request.user)
             just_joined = True
         elif request.POST.get('action_type', '') == 'comment':
-            comment = Comment(text=request.POST.get("message", ""), author=request.user, game=my_game, timestamp=timezone.now())
+            comment = Comment(text=request.POST.get("message", ""), author=request.user, game=my_game,
+                              timestamp=timezone.now())
             comment.save()
 
     if my_game.players.filter(id=request.user.id):

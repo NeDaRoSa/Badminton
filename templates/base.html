@@ -35,7 +35,16 @@
         <div id="navbar" class="navbar-collapse collapse">
             {% if user.is_authenticated %}
                 <ul class="nav navbar-nav">
-                    <li><a href="/update_password/">Update password</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            User settings
+                            <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/update_password/">Update password</a></li>
+                            <li><a href="/edit_profile/">Edit profile</a></li>
+                        </ul>
+                    </li>
                     <li><a href="/upcoming/">Upcoming games</a></li>
                     <li><a href="/create_game/">New game</a></li>
                     <li><a href="/past_games/">Past games</a></li>
@@ -43,7 +52,7 @@
             {% endif %}
             <ul class="nav navbar-nav navbar-right">
                 {% if user.is_authenticated %}
-                    <li class="navbar-text"> Hello, {{ user.first_name }}</li>
+                    <li class="hidden-sm hidden-xs navbar-text"> Hello, {{ user.first_name }}</li>
                     <li><a href="/logout/"> Logout </a></li>
                 {% else %}
                     <li><a href="/register/"> Register </a></li>
