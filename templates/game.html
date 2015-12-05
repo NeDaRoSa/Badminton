@@ -45,7 +45,7 @@
 
         <div class="row">
             <p><button id="toggle-button" class="btn btn-default btn-block small-bottom" data-toggle="collapse"
-                    data-target="#details_collapse">
+                       data-target="#details_collapse">
                 <span class="glyphicon glyphicon-collapse-down"></span>
                 <strong>Game details</strong>
             </button>
@@ -62,22 +62,60 @@
 
         <div class="row">
             <p><button id="toggle-button" class="btn btn-default btn-block small-bottom" data-toggle="collapse"
-                    data-target="#players_collapse">
+                       data-target="#players_collapse">
                 <span class="glyphicon glyphicon-collapse-down"></span>
                 <strong>Players ({{ game.players.all|length }}/{{ game.max_players }})</strong>
             </button>
             <div id="players_collapse" class="collapse large-bottom">
-               <table class="table">
+                <table class="table">
                     {% for player in game.players.all %}
                         <tr><td class="col-lg-5"><strong>Name:</strong></td> <td>{{ player.first_name }} {{ player.last_name }}</td></tr>
                     {% endfor %}
                     {% for empty in empty_list %}
                         <tr class="success"><td><strong>Name: </strong></td><td>-</td></tr>
                     {% endfor %}
-               </table>
+                </table>
             </div>
-        </p>
+            </p>
         </div>
+
+
+        <div class="row">
+            <p>
+
+                <button id="toggle-button" class="btn btn-default btn-block small-bottom" data-toggle="collapse"
+                        data-target="#comments_collapse">
+                    <span class="glyphicon glyphicon-collapse-down"></span>
+                    <strong>Comments</strong>
+                </button>
+
+
+            <div id="comments_collapse" class="collapse large-bottom">
+
+                <table class="table">
+                    {% for comment in game.comments.all %}
+                        <tr>
+                            <td class="col-lg-2"><strong>{{ comment.author.first_name }} {{ comment.author.last_name }}</strong></td>
+                            <td >{{ comment.text }}</td>
+                            <td class="col-lg-2">{{comment.timestamp}}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+
+                <form role="form" class="form-horizontal" id="message_form" method="post" action="" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input type="hidden" name="action_type" value="comment"/>
+                    <div class="input-group">
+                        <input id="message_text" autocomplete="off" type="text" class="form-control" name="message" value="" size="100"/>
+                        <span class="input-group-btn">
+                            <input class="btn btn-primary" type="submit" name="submit" value="Send" />
+                        </span>
+                    </div>
+                </form>
+            </div>
+            </p>
+        </div>
+
 
         {% if not is_past_game %}
             {% if has_joined %}

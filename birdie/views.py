@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
 from birdie.forms import UserForm, GameForm, PasswordChangeForm
-from birdie.models import Game
+from birdie.models import Game, Comment
 
 
 def index(request):
@@ -148,10 +148,13 @@ def game(request, game_id):
         if request.POST.get('action_type', '') == 'add':
             if len(my_game.players.all()) < my_game.max_players:
                 my_game.players.add(request.user)
+                just_joined = True
         elif request.POST.get('action_type', '') == 'remove':
             my_game.players.remove(request.user)
-
-        just_joined = True
+            just_joined = True
+        elif request.POST.get('action_type', '') == 'comment':
+            comment = Comment(text=request.POST.get("message", ""), author=request.user, game=my_game, timestamp=timezone.now())
+            comment.save()
 
     if my_game.players.filter(id=request.user.id):
         has_joined = True

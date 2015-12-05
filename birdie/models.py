@@ -33,3 +33,14 @@ class Game(models.Model):
         ordering = ['datetime']
 
 
+class Comment(models.Model):
+    text = models.CharField(max_length=1024)
+    timestamp = models.DateTimeField()
+    author = models.ForeignKey(User, related_name='comments')
+    game = models.ForeignKey(Game, related_name='comments')
+
+    def __str__(self):
+        return self.text
+
+    class Meta:
+        ordering = ['timestamp']
