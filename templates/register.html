@@ -13,7 +13,13 @@
                 <div class="form-group">
                     {{ user_form.as_p }}
                 </div>
+                <div class="form-group{% if passphrase_error %} has-error{% endif %}">
+                    <label for="id_passphrase">Registration Code:</label>
+                    <input class="form-control" id="id_passphrase" maxlength="30" name="passphrase" type="password" />
+                </div>
+                {% if passphrase_error %}<div class="alert alert-danger">{{ passphrase_error }}</div>{% endif %}
                 <input class="btn btn-primary" type="submit" name="submit" value="Register" />
+
             </form>
 
     {% endif %}

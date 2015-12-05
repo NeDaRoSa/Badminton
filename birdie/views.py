@@ -58,27 +58,30 @@ def home(request):
 
 def register(request):
     registered = False
+    passphrase_error = None
 
     if request.method == 'POST':
+        code = request.POST.get('passphrase', '')
         user_form = UserForm(data=request.POST)
-
-        if user_form.is_valid():
-            user = user_form.save()
-            password = user.password
-            user.set_password(password)
-            user.save()
-
-            user = authenticate(username=user.username, password=password)
-            login(request, user)
-            return HttpResponseRedirect('/')
+        if code != 'CHANGE_THIS':
+            passphrase_error = 'The passphrase you entered is incorrect.'
         else:
-            print(user_form.errors)
+            if user_form.is_valid():
+                user = user_form.save()
+                password = request.POST.get('password1', '')
+                print(password)
+
+                user = authenticate(username=user.username, password=password)
+                login(request, user)
+                return HttpResponseRedirect('/')
+            else:
+                print(user_form.errors)
 
     else:
         user_form = UserForm()
 
     return render(request, 'register.html',
-                  {'user_form': user_form, 'registered': registered})
+                  {'user_form': user_form, 'registered': registered, 'passphrase_error': passphrase_error})
 
 
 @login_required()

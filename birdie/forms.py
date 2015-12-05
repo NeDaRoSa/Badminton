@@ -1,21 +1,26 @@
 from datetime import datetime
 from django import forms
-from django.contrib.auth.forms import PasswordChangeForm as PwForm
+from django.contrib.auth.forms import PasswordChangeForm as PwForm, UserCreationForm
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
 from datetimewidget.widgets import DateTimeWidget
 from birdie.models import Location, Game
 
 
-class UserForm(forms.ModelForm):
+class UserForm(UserCreationForm):
     username = forms.CharField(max_length=30, min_length=4, widget=forms.TextInput(attrs={'class': 'form-control'}))
-    password = forms.CharField(max_length=30, min_length=8, widget=forms.PasswordInput(attrs={'class': 'form-control'}))
+    password1 = forms.CharField(max_length=30, min_length=8, widget=forms.PasswordInput(attrs={'class': 'form-control'}),
+                                label=_("Password"))
+    password2 = forms.CharField(max_length=30, min_length=8,
+                                widget=forms.PasswordInput(attrs={'class': 'form-control'}),
+                                label=_("Password Confirmation"),
+                                help_text=_("Enter the same password as before, for verification."))
     first_name = forms.CharField(max_length=30, widget=forms.TextInput(attrs={'class': 'form-control'}))
     last_name = forms.CharField(max_length=30, widget=forms.TextInput(attrs={'class': 'form-control'}))
 
     class Meta:
         model = User
-        fields = ('username', 'first_name', 'last_name', 'password')
+        fields = ('username', 'first_name', 'last_name', 'password1', 'password2')
 
 
 class GameForm(forms.ModelForm):

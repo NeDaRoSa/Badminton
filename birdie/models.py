@@ -4,7 +4,10 @@ from django.contrib.auth.models import User
 
 class Location(models.Model):
     name = models.CharField(max_length=64)
-    address = models.CharField(max_length=256)
+    street_number = models.IntegerField()
+    street = models.CharField(max_length=256)
+    postcode = models.CharField(max_length=8)
+    description = models.CharField(max_length=1024, null=True)
 
     def __str__(self):
         return self.name
