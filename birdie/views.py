@@ -136,7 +136,6 @@ def past_games(request):
 @login_required()
 def game(request, game_id):
     my_game = Game.objects.get(id=game_id)
-    empty_list = range(0, my_game.max_players - len(my_game.players.all()))
 
     just_joined = False
     has_joined = False
@@ -153,6 +152,8 @@ def game(request, game_id):
 
     if my_game.players.filter(id=request.user.id):
         has_joined = True
+
+    empty_list = range(0, my_game.max_players - len(my_game.players.all()))
 
     context_dict = {
         'game': my_game,
