@@ -29,11 +29,11 @@
         </div>
 
         <div class="row">
-            <p><button id="toggle-button" class="btn btn-default btn-block small-bottom" data-toggle="collapse" data-target="#location_collapse">
+            <p><button id="toggle-button" class="btn btn-default btn-block btn-left" data-toggle="collapse" data-target="#location_collapse">
                 <span class="glyphicon glyphicon-collapse-down"></span>
                 <strong>Club: {{ game.location.name }}</strong>
             </button>
-            <div id="location_collapse" class="collapse large-bottom">
+            <div id="location_collapse" class="collapse ">
                 <table class="table">
                     <tr><td class="col-lg-5"><strong>City: </strong></td><td>Glasgow</td></tr>
                     <tr><td><strong>Postcode: </strong></td><td>{{ game.location.postcode }}</td></tr>
@@ -44,12 +44,12 @@
         </div>
 
         <div class="row">
-            <p><button id="toggle-button" class="btn btn-default btn-block small-bottom" data-toggle="collapse"
+            <p><button id="toggle-button" class="btn btn-default btn-block btn-left" data-toggle="collapse"
                        data-target="#details_collapse">
                 <span class="glyphicon glyphicon-collapse-down"></span>
                 <strong>Game details</strong>
             </button>
-            <div id="details_collapse" class="collapse large-bottom">
+            <div id="details_collapse" class="collapse ">
                 <table class="table">
                     <tr><td class="col-lg-5"><strong>Time: </strong></td><td>{{ game.datetime }}</td></tr>
                     <tr><td><strong>Length: </strong></td><td>{{ game.duration }}</td></tr>
@@ -61,12 +61,13 @@
         </div>
 
         <div class="row">
-            <p><button id="toggle-button" class="btn btn-default btn-block small-bottom" data-toggle="collapse"
+            <p><button id="toggle-button" class="btn btn-default btn-block btn-left"
+                       data-toggle="collapse"
                        data-target="#players_collapse">
                 <span class="glyphicon glyphicon-collapse-down"></span>
                 <strong>Players  </strong><span class="badge">{{ game.players.all|length }}/{{ game.max_players }}</span>
             </button>
-            <div id="players_collapse" class="collapse large-bottom">
+            <div id="players_collapse" class="collapse {% if just_joined %}in{% endif %}">
                 <table class="table">
                     {% for player in game.players.all %}
                         <tr><td class="col-lg-5"><strong>Name:</strong></td> <td>{{ player.first_name }} {{ player.last_name }}</td></tr>
@@ -83,21 +84,31 @@
         <div class="row">
             <p>
 
-                <button id="toggle-button" class="btn btn-default btn-block small-bottom" data-toggle="collapse"
+                <button id="toggle-button" class="btn btn-default btn-block btn-left" data-toggle="collapse"
                         data-target="#comments_collapse">
                     <span class="glyphicon glyphicon-collapse-down"></span>
                     <strong>Comments  </strong><span class="badge">{{ game.comments.all|length }}</span>
                 </button>
 
 
-            <div id="comments_collapse" class="collapse large-bottom">
+            <div id="comments_collapse" class="collapse {% if just_commented %}in{% endif %}">
                 <table class="table">
                     {% for comment in game.comments.all %}
                         <tr>
-                            <td class="col-lg-2"><strong>{{ comment.author.first_name }} {{ comment.author.last_name }}</strong></td>
+                            <td class="col-lg-2 col-sm-5 col-xs-6">
+                                <strong>{{ comment.author.first_name }} {{ comment.author.last_name }}</strong>
+                                <div class="hidden-lg hidden-md">
+                                    <br/>
+                                    ({{ comment.timestamp }})
+                                </div>
+                            </td>
                             <td >{{ comment.text }}</td>
-                            <td class="col-lg-2">{{comment.timestamp}}</td>
+                            <div class="hidden-xs hidden-sm">
+                                <td class="col-lg-2 hidden-sm hidden-xs">{{comment.timestamp}}</td>
+                            </div>
                         </tr>
+                    {% empty %}
+                        <tr><td>No comments to show..</td></tr>
                     {% endfor %}
                 </table>
 

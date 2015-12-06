@@ -168,22 +168,19 @@ def manage_games(request):
 @login_required()
 def upcoming_games(request):
     games = Game.objects.filter(datetime__gt=timezone.now())
+    user_games = request.user.games.all()
+    games = [(g, g in user_games) for g in games]
 
-    return render(request, 'game_list.html', {'games': games, 'title': 'Upcoming games'})
-
-
-@login_required()
-def joined_games(request):
-    games = request.user.games.all()
-
-    return render(request, 'game_list.html', {'games': games, 'title': 'Games I joined'})
+    return render(request, 'games/game_list.html', {'games': games, 'title': 'Upcoming games'})
 
 
 @login_required()
 def past_games(request):
     games = Game.objects.filter(datetime__lt=timezone.now())
+    user_games = request.user.games.all()
+    games = [(g, g in user_games) for g in games]
 
-    return render(request, 'game_list.html', {'games': games, 'title': 'Past games'})
+    return render(request, 'games/game_list.html', {'games': games, 'title': 'Past games'})
 
 
 @login_required()
@@ -192,6 +189,7 @@ def game(request, game_id):
 
     just_joined = False
     has_joined = False
+    just_commented = False
     is_past_game = my_game.datetime < timezone.now()
 
     if request.method == 'POST':
@@ -206,6 +204,7 @@ def game(request, game_id):
             comment = Comment(text=request.POST.get("message", ""), author=request.user, game=my_game,
                               timestamp=timezone.now())
             comment.save()
+            just_commented = True
 
     if my_game.players.filter(id=request.user.id):
         has_joined = True
@@ -216,11 +215,12 @@ def game(request, game_id):
         'game': my_game,
         'has_joined': has_joined,
         'just_joined': just_joined,
+        'just_commented': just_commented,
         'empty_list': empty_list,
         'is_past_game': is_past_game
     }
 
-    return render(request, 'game.html', context_dict)
+    return render(request, 'games/game.html', context_dict)
 
 
 @login_required()

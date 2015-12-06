@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block body_block %}
+    <div class="page-header">
+        <h2>{{ title }}</h2>
+    </div>
+    {% for game, has_joined in games %}
+        <div class="panel {% if has_joined %}panel-success{% else %}panel-default{% endif %}">
+            <div class="panel-heading"><strong>{{ game.name }} ({{ game.datetime }})</strong></div>
+            <div class="panel-body">
+                <p><strong>Location: </strong>{{ game.location }}</p>
+                <p><strong>Players: </strong>{{ game.players.all|length }}/{{ game.max_players }}
+                    {% if has_joined %}
+                        (You are playing)
+                    {% endif %}
+                </p>
+                <div class="btn-group" role="group" aria-label="...">
+                    <td class="col-lg-2"><a href="/game/{{ game.id }}/" class="btn btn-default btn-sm">Details</a></td>
+                </div>
+            </div>
+        </div>
+
+    {% empty %}
+        <div class="alert alert-primary">There are no games to show.</div>
+    {% endfor %}
+{% endblock %}

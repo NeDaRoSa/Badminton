@@ -16,7 +16,6 @@ urlpatterns = [
     url(r'^logout/', views.user_logout, name='logout'),
     url(r'^register/', views.register, name='register'),
     url(r'^upcoming/', views.upcoming_games, name='upcoming_games'),
-    url(r'^joined_games/', views.joined_games, name='joined_games'),
     url(r'^past_games/', views.past_games, name='past_games'),
     url(r'^update_password/', views.update_password, name='update_password'),
     url(r'^password_updated/', views.password_updated, name='password_updated'),
