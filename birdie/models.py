@@ -17,10 +17,10 @@ class Location(models.Model):
 
 
 class Game(models.Model):
-    organiser = models.ForeignKey(User, related_name='organised_games')
+    organiser = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='organised_games')
     players = models.ManyToManyField(User, related_name='games')
     name = models.CharField(max_length=64)
-    location = models.ForeignKey(Location)
+    location = models.ForeignKey(Location, on_delete=models.SET_NULL, null=True)
     description = models.CharField(max_length=1024)
     datetime = models.DateTimeField()
     duration = models.IntegerField()
@@ -36,8 +36,8 @@ class Game(models.Model):
 class Comment(models.Model):
     text = models.CharField(max_length=1024)
     timestamp = models.DateTimeField()
-    author = models.ForeignKey(User, related_name='comments')
-    game = models.ForeignKey(Game, related_name='comments')
+    author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='comments')
+    game = models.ForeignKey(Game, on_delete=models.CASCADE, related_name='comments')
 
     def __str__(self):
         return self.text

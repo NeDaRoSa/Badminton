@@ -1,4 +1,5 @@
 from django.contrib.auth import authenticate, login, logout
+from django.core.exceptions import PermissionDenied
 from django.utils import timezone
 from django.contrib.auth.views import password_change
 from django.contrib.auth.decorators import login_required
@@ -145,6 +146,15 @@ def edit_game(request, game_id):
         game_form = GameEditForm(instance=my_game)
 
     return render(request, 'games/edit_game.html', {'game_form': game_form, 'edited': edited, 'game': my_game})
+
+
+def delete_game(request, game_id):
+    my_game = Game.objects.get(id=game_id)
+    if my_game.organiser != request.user:
+        raise PermissionDenied
+
+    my_game.delete()
+    return HttpResponseRedirect('/manage_games/')
 
 
 @login_required()

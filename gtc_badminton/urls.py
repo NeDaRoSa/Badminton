@@ -22,6 +22,7 @@ urlpatterns = [
     url(r'^password_updated/', views.password_updated, name='password_updated'),
     url(r'^edit_profile/', views.edit_profile, name='edit_profile'),
     url(r'^game/(?P<game_id>\w+)/$', views.game, name='view_game'),
+    url(r'^delete/(?P<game_id>\w+)/$', views.delete_game, name='delete_game'),
     url(r'^edit_game/(?P<game_id>\w+)/$', views.edit_game, name='edit_game'),
     url(r'^manage_games/', views.manage_games, name='manage_games'),
     url(r'^create_game/', views.create_game, name='create_game'),
