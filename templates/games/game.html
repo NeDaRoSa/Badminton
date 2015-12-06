@@ -39,6 +39,15 @@
                     <tr><td><strong>Postcode: </strong></td><td>{{ game.location.postcode }}</td></tr>
                     <tr><td> <strong>Address:</strong></td><td> {{ game.location.street_number }} {{ game.location.street }}</td></tr>
                     <tr><td><strong>Website: </strong></td><td><a href="{{ game.location.url }}">{{ game.location.url }}</a></td></tr>
+                    {% if game.location.embed_url %}
+                        <tr>
+                            <td colspan="2">
+                                <div class="embed-responsive embed-responsive-4by3">
+                                    {{ game.location.embed_url }}
+                                </div>
+                            </td>
+                        </tr>
+                    {% endif %}
                 </table>
             </div>
             </p>

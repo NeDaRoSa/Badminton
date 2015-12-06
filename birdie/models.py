@@ -9,6 +9,7 @@ class Location(models.Model):
     postcode = models.CharField(max_length=8)
     description = models.CharField(max_length=1024, null=True)
     url = models.URLField(max_length=128)
+    embed_url = models.URLField(null=True, max_length=1024)
 
     def __str__(self):
         return self.name
