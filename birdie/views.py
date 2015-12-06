@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.shortcuts import render
+
 from birdie.forms import UserForm, GameForm, PasswordChangeForm, UserUpdateForm, GameEditForm
 from birdie.models import Game, Comment
 
@@ -20,6 +21,8 @@ def index(request):
 def user_login(request):
     if request.user.is_authenticated():
         return HttpResponseRedirect('/home/')
+
+    is_invalid_details = False
 
     if request.method == 'POST':
         username = request.POST["username"]
@@ -37,10 +40,9 @@ def user_login(request):
 
         else:
             print("Invalid login details: {0}, {1}".format(username, password))
-            return HttpResponse("Invalid login details supplied")
+            is_invalid_details = True
 
-    else:
-        return render(request, 'login.html', {})
+    return render(request, 'registration/login.html', {'is_invalid': is_invalid_details})
 
 
 @login_required()
@@ -138,7 +140,7 @@ def edit_game(request, game_id):
 
         if game_form.is_valid():
             game_form.save()
-            edited= True
+            edited = True
         else:
             print(game_form.errors)
 
@@ -148,6 +150,7 @@ def edit_game(request, game_id):
     return render(request, 'games/edit_game.html', {'game_form': game_form, 'edited': edited, 'game': my_game})
 
 
+@login_required()
 def delete_game(request, game_id):
     my_game = Game.objects.get(id=game_id)
     if my_game.organiser != request.user:
