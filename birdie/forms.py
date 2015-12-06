@@ -32,7 +32,7 @@ class UserUpdateForm(forms.ModelForm):
         fields = ('first_name', 'last_name')
 
 
-class GameForm(forms.ModelForm):
+class GameEditForm(forms.ModelForm):
 
     _datetime_options = {
         'pickerPosition': 'bottom-left',
@@ -41,12 +41,19 @@ class GameForm(forms.ModelForm):
         'minuteStep': '30'
     }
 
-    name = forms.CharField(max_length=30, min_length=4, widget=forms.TextInput(attrs={'class': 'form-control'}))
     location = forms.ModelChoiceField(required=True, queryset=Location.objects.all(), widget=forms.Select(attrs={'class': 'form-control'}))
     description = forms.CharField(max_length=1024, widget=forms.Textarea(attrs={'class': 'form-control'}))
     datetime = forms.DateTimeField(widget=DateTimeWidget(attrs={'id': 'datetimepicker'},bootstrap_version=3, options=_datetime_options), input_formats=['%d/%m/%Y %H:%M',])
     duration = forms.ChoiceField(choices=[(x,x) for x in range(1, 5)], widget=forms.Select(attrs={'class': 'form-control'}), required=True, initial='1')
     max_players = forms.ChoiceField(choices=[(x,x) for x in range(2, 16)], widget=forms.Select(attrs={'class': 'form-control'}), required=True, initial='4')
+
+    class Meta:
+        model = Game
+        fields = ('location', 'description', 'datetime', 'duration', 'max_players')
+
+
+class GameForm(GameEditForm):
+    name = forms.CharField(max_length=30, min_length=4, widget=forms.TextInput(attrs={'class': 'form-control'}))
 
     class Meta:
         model = Game

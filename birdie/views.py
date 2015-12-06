@@ -3,9 +3,9 @@ from django.utils import timezone
 from django.contrib.auth.views import password_change
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.shortcuts import render
-from birdie.forms import UserForm, GameForm, PasswordChangeForm, UserUpdateForm
+from birdie.forms import UserForm, GameForm, PasswordChangeForm, UserUpdateForm, GameEditForm
 from birdie.models import Game, Comment
 
 
@@ -121,7 +121,35 @@ def create_game(request):
     else:
         game_form = GameForm()
 
-    return render(request, 'create_game.html', {'game_form': game_form, 'created': created})
+    return render(request, 'games/create_game.html', {'game_form': game_form, 'created': created})
+
+
+@login_required()
+def edit_game(request, game_id):
+    edited = False
+    try:
+        my_game = Game.objects.get(id=game_id)
+    except:
+        raise Http404
+
+    if request.method == 'POST':
+        game_form = GameEditForm(data=request.POST, instance=my_game)
+
+        if game_form.is_valid():
+            game_form.save()
+            edited= True
+        else:
+            print(game_form.errors)
+
+    else:
+        game_form = GameEditForm(instance=my_game)
+
+    return render(request, 'games/edit_game.html', {'game_form': game_form, 'edited': edited, 'game': my_game})
+
+
+@login_required()
+def manage_games(request):
+    return render(request, 'games/manage_games.html', {'games': request.user.games.all()})
 
 
 @login_required()
@@ -129,13 +157,6 @@ def upcoming_games(request):
     games = Game.objects.filter(datetime__gt=timezone.now())
 
     return render(request, 'game_list.html', {'games': games, 'title': 'Upcoming games'})
-
-
-@login_required()
-def my_games(request):
-    games = request.user.organised_games.all()
-
-    return render(request, 'game_list.html', {'games': games, 'title': 'Games I organise(d)'})
 
 
 @login_required()

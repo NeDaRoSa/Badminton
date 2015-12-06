@@ -3,10 +3,14 @@
 
 {% block body_block %}
 
-    {% if created %}
-        <h3>Game was successfully added.</h3>
-    {% else %}
-        <h3>Create new game</h3>
+    {% if edited %}
+        <div class="alert alert-success alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            Changes saved successfully</div>
+    {% endif %}
+        <h3>Edit {{ game.name }}</h3>
         <form method="post" role="form">
             {% for field in game_form.visible_fields %}
                 <div id="div_{{ field.html_name }}"
@@ -26,9 +30,8 @@
             {% endfor %}
             {% csrf_token %}
             <div class="form-group">
-                <input type="submit" value="Submit" class="btn btn-primary" />
+                <input type="submit" value="Save Changes" class="btn btn-primary" />
             </div>
         </form>
-    {% endif %}
 
 {% endblock %}

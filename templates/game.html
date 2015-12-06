@@ -64,7 +64,7 @@
             <p><button id="toggle-button" class="btn btn-default btn-block small-bottom" data-toggle="collapse"
                        data-target="#players_collapse">
                 <span class="glyphicon glyphicon-collapse-down"></span>
-                <strong>Players ({{ game.players.all|length }}/{{ game.max_players }})</strong>
+                <strong>Players  </strong><span class="badge">{{ game.players.all|length }}/{{ game.max_players }}</span>
             </button>
             <div id="players_collapse" class="collapse large-bottom">
                 <table class="table">
@@ -86,12 +86,11 @@
                 <button id="toggle-button" class="btn btn-default btn-block small-bottom" data-toggle="collapse"
                         data-target="#comments_collapse">
                     <span class="glyphicon glyphicon-collapse-down"></span>
-                    <strong>Comments</strong>
+                    <strong>Comments  </strong><span class="badge">{{ game.comments.all|length }}</span>
                 </button>
 
 
             <div id="comments_collapse" class="collapse large-bottom">
-
                 <table class="table">
                     {% for comment in game.comments.all %}
                         <tr>

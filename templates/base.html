@@ -45,9 +45,18 @@
                             <li><a href="/edit_profile/">Edit profile</a></li>
                         </ul>
                     </li>
-                    <li><a href="/upcoming/">Upcoming games</a></li>
-                    <li><a href="/create_game/">New game</a></li>
-                    <li><a href="/past_games/">Past games</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Games
+                            <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/upcoming/">Upcoming games</a></li>
+                            <li><a href="/past_games/">Past games</a></li>
+                            <li><a href="/create_game/">New game</a></li>
+                            <li><a href="/manage_games/">Manage games</a></li>
+                        </ul>
+                    </li>
                 </ul>
             {% endif %}
             <ul class="nav navbar-nav navbar-right">
