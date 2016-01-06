@@ -43,8 +43,10 @@ class GameEditForm(forms.ModelForm):
 
     location = forms.ModelChoiceField(required=True, queryset=Location.objects.all(), widget=forms.Select(attrs={'class': 'form-control'}))
     description = forms.CharField(max_length=1024, widget=forms.Textarea(attrs={'class': 'form-control'}))
-    datetime = forms.DateTimeField(widget=DateTimeWidget(attrs={'id': 'datetimepicker'},bootstrap_version=3, options=_datetime_options), input_formats=['%d/%m/%Y %H:%M',])
-    duration = forms.ChoiceField(choices=[(x,x) for x in range(1, 5)], widget=forms.Select(attrs={'class': 'form-control'}), required=True, initial='1')
+    datetime = forms.DateTimeField(widget=DateTimeWidget(attrs={'id': 'datetimepicker'},bootstrap_version=3, options=_datetime_options), input_formats=['%d/%m/%Y %H:%M',],
+                                   label='Date and time')
+    duration = forms.ChoiceField(choices=[(x,x) for x in range(1, 5)], widget=forms.Select(attrs={'class': 'form-control'}),
+                                 required=True, initial='1', label='Duration (hours)')
     max_players = forms.ChoiceField(choices=[(x,x) for x in range(2, 16)], widget=forms.Select(attrs={'class': 'form-control'}), required=True, initial='4')
 
     class Meta:
