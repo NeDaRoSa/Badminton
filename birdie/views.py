@@ -135,6 +135,9 @@ def edit_game(request, game_id):
     except:
         raise Http404
 
+    if my_game.organiser != request.user:
+        raise PermissionDenied
+
     if request.method == 'POST':
         game_form = GameEditForm(data=request.POST, instance=my_game)
 
